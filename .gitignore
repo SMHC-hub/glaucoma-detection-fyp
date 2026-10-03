@@ -1,0 +1,83 @@
+# ── Python ──────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ── Virtual Environments ────────────────────────────────────
+venv/
+.venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# ── Jupyter Notebooks ───────────────────────────────────────
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# ── Raw Medical Datasets (DO NOT COMMIT) ────────────────────
+Dataset/
+External/
+full-fundus/
+optic-disc/
+optic-cup/
+blood-vessel/
+spectral-oct/
+*.zip
+*.tar
+*.gz
+*.7z
+*.rar
+*.tif
+*.tiff
+*.dcm
+
+# ── Heavy Model Checkpoints (DO NOT COMMIT) ─────────────────
+*.pt
+*.pth
+*.bin
+*.h5
+*.hdf5
+*.onnx
+*.safetensors
+*.ckpt
+outputs_v2/models/
+outputs_v2/checkpoints/
+
+# ── IDEs & Editors ──────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Environment Secrets ─────────────────────────────────────
+.env
+*.env
+secrets.*
+
+# ── Logs & Temporary Files ──────────────────────────────────
+*.log
+logs/
+temp/
+tmp/
