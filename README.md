@@ -259,17 +259,6 @@ The pipeline will:
 
 ---
 
-## 📜 Citation & License
+## 📜 License
 
-This project is licensed under the **MIT License** — free for academic and clinical research use.
-
-```bibtex
-@misc{smhc2026glaucomav2,
-  author = {SMHC},
-  title = {Multi-Modal Glaucoma Detection & Clinical Stratification with Attention and CDR Guidance},
-  year = {2026},
-  publisher = {GitHub},
-  howpublished = {\url{https://github.com/SMHC-hub/glaucoma-detection-fyp}}
-}
-```
-
+This project is licensed under the **MIT License**.
