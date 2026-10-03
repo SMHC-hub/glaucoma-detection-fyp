@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
 <p align="center">
-  <b>A state-of-the-art computer-aided diagnostic (CAD) system for early glaucoma detection, combining multi-channel fundus representations (disc, cup, vessels), Convolutional Block Attention Modules (CBAM), Cup-to-Disc Ratio (CDR) loss guidance, and explainable AI.</b>
+  <b>A multi-modal computer-aided diagnostic (CAD) system for early glaucoma detection, combining 6-channel fundus decomposition (RGB, CLAHE disc, cup, and vasculature), Convolutional Block Attention Modules (CBAM), Cup-to-Disc Ratio (CDR) loss guidance, and honest cross-domain external validation.</b>
 </p>
 
 </div>
@@ -18,6 +18,11 @@
 ---
 
 ## 📌 Clinical Motivation
+
+> [!IMPORTANT]
+> **Clinical Generalization & Honest Reporting**: 
+> While achieving **0.9273 AUC-ROC** on the standardized internal test set (SMDG-19), the model was also rigorously tested on an independent clinical cohort (**ACRIMA dataset, 705 images across distinct camera hardware**) achieving an **honest external AUC-ROC of 0.7887 (0.789)** without fine-tuning. This cross-domain evaluation establishes a transparent, clinically grounded baseline for real-world automated screening.
+
 
 Glaucoma is the leading global cause of irreversible blindness, often termed the *"silent thief of sight"* due to its asymptomatic progression in early stages. Traditional clinical diagnosis relies heavily on expert evaluation of the **Optic Nerve Head (ONH)**, specifically:
 - **Cup-to-Disc Ratio (CDR)**: Vertical and horizontal enlargement of the optic cup relative to the optic disc.
@@ -32,15 +37,15 @@ This project delivers **Glaucoma V2.1**, an advanced multi-modal deep learning p
 
 ```mermaid
 flowchart TD
-    subgraph Inputs["Multi-Channel Fundus Decomposition"]
-        I1["Color Fundus (RGB)"]
-        I2["Optic Disc ROI (Green Channel + CLAHE)"]
-        I3["Optic Cup ROI"]
-        I4["Retinal Blood Vessel Map"]
+    subgraph Inputs["6-Channel Fundus Decomposition Pipeline"]
+        I1["Ch 1-3: Color Fundus (RGB)"]
+        I2["Ch 4: Optic Disc ROI (Green Channel + CLAHE)"]
+        I3["Ch 5: Optic Cup ROI"]
+        I4["Ch 6: Retinal Blood Vessel Segmentation"]
     end
 
-    subgraph Feature_Extraction["EfficientNet-B3 + Attention Backbone"]
-        I1 & I2 & I3 & I4 --> CH["Multi-Channel Tensor Assembly (300×300)"]
+    subgraph Feature_Extraction["EfficientNet-B3 (6-Channel Stem) + CBAM"]
+        I1 & I2 & I3 & I4 --> CH["Composite 6-Channel Input Tensor (6×300×300)"]
         CH --> B3["EfficientNet-B3 Deep Feature Extractor"]
         B3 --> CA["Channel Attention Module (AvgPool + MaxPool + MLP)"]
         CA --> SA["Spatial Attention Module (7×7 Conv + Sigmoid)"]
@@ -73,11 +78,12 @@ flowchart TD
     class GCAM,SEV,TTA highlight;
 ```
 
-### 1. Multi-Channel Fundus Representation
-Standard RGB fundus images often suffer from uneven illumination and weak vessel contrast. The V2.1 input pipeline decomposes and enhances images into multi-channel inputs:
-- **Green Channel Extraction**: Retinal nerve fiber layers and vasculature exhibit the highest contrast in the green spectrum.
-- **CLAHE Enhancement**: Contrast-Limited Adaptive Histogram Equalization standardizes varying illumination across clinical centers.
-- **Optic Disc & Cup ROIs**: Isolates the primary pathological locus.
+### 1. 6-Channel Multi-Modal Fundus Representation
+Standard 3-channel RGB fundus images often suffer from uneven illumination and weak vascular contrast. V2.1 expands the input into a unified **6-channel tensor** ($6 \times 300 \times 300$) where the first convolutional stem of EfficientNet-B3 is expanded to process all complementary modalities simultaneously:
+- **Channels 1–3 (RGB Color Fundus)**: Preserves holistic retinal topography, background coloration, and macula position.
+- **Channel 4 (Optic Disc Green-CLAHE)**: Retinal nerve fiber layers and disc margins exhibit maximum contrast in the green spectrum; CLAHE standardizes illumination across varying cameras.
+- **Channel 5 (Optic Cup ROI)**: Explicitly feeds cup excavation boundaries to assist rim geometry extraction.
+- **Channel 6 (Retinal Vasculature)**: Captures nasal shifting and kinking of retinal blood vessels at the optic rim.
 
 ### 2. CBAM (Convolutional Block Attention Module)
 Integrates sequential **Channel Attention** (learning *what* features are meaningful) and **Spatial Attention** (learning *where* in the optic disc to focus), enabling the network to localize neuroretinal rim thinning dynamically.
@@ -252,7 +258,7 @@ jupyter notebook Model/glaucoma_v2.1_complete.ipynb
 
 The pipeline will:
 1. Load and parse `data/metadata - standardized.csv`.
-2. Construct the 4-channel tensor representations.
+2. Construct the composite 6-channel tensor representations ($6 \times 300 \times 300$).
 3. Build the `EfficientNet-B3 + CBAM` model architecture.
 4. Execute two-phase transfer learning with CDR-aware BCE loss.
 5. Compute TTA inference, multi-threshold curves, and Grad-CAM explainability heatmaps.
