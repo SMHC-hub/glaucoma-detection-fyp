@@ -1,7 +1,7 @@
 <div align="center">
 
-# 👁️ Multi-Modal Glaucoma Detection & Clinical Stratification (V2.1)
-### EfficientNet-B3 + CBAM Attention · CDR-Aware Loss · Test-Time Augmentation · Grad-CAM Interpretability
+# 👁️ GlaucoVision-AI
+### Multi-Channel EfficientNet-B3 with CBAM Attention and CDR-Guided Explainability for Glaucoma Detection
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.1%2B-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
