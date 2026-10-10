@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 # 👁️ Multi-Modal Glaucoma Detection & Clinical Stratification (V2.1)
 ### EfficientNet-B3 + CBAM Attention · CDR-Aware Loss · Test-Time Augmentation · Grad-CAM Interpretability
@@ -267,4 +267,4 @@ The pipeline will:
 
 ## 📜 License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the **[MIT License](LICENSE)**.
